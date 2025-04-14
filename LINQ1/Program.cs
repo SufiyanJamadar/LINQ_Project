@@ -170,6 +170,13 @@
             studentCountByCity.ForEach(c => Console.WriteLine($" {c.City} : {c.Count} "));
 
 
+            // finding avarages
+
+            int maxMarks = students.Max(s => s.Marks);
+            double avgMarks = students.Average(s => s.Marks);
+
+            Console.WriteLine($"\nMax Marks: {maxMarks}");
+            Console.WriteLine($"Average Marks: {avgMarks}");
 
 
 
