@@ -12,5 +12,8 @@ namespace LINQ1
         public string Name { get; set; }
         public string City { get; set; }
         public int Marks { get; set; }
+
+
+        public List<Subject> Subjects { get; set; }
     }
 }

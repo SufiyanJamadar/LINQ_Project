@@ -1,4 +1,6 @@
-﻿namespace LINQ1
+﻿using System.Linq;
+
+namespace LINQ1
 {
     internal class Program
     {
@@ -132,61 +134,141 @@
 
 
 
-            var studentCourse = from s in students
-                                join c in courses on s.Id equals c.StudentId
-                                select new
-                                {
-                                    StudentName = s.Name,
-                                    CourseName = c.CourseName
-                                };
+            //var studentCourse = from s in students
+            //                    join c in courses on s.Id equals c.StudentId
+            //                    select new
+            //                    {
+            //                        StudentName = s.Name,
+            //                        CourseName = c.CourseName
+            //                    };
 
-            Console.WriteLine("\nStudent and Course");
+            //Console.WriteLine("\nStudent and Course");
 
-            foreach (var course in studentCourse)
+            //foreach (var course in studentCourse)
+            //{
+            //    Console.WriteLine($"Student Name : {course.StudentName} and Course Name : {course.CourseName}");
+
+
+            //}
+
+
+            //var studentCourse2 = students.Join(courses,
+            //    s => s.Id,
+            //    c => c.StudentId, (s, c) => new { s.Name, c.CourseName }).ToList();
+
+            //Console.WriteLine("\nStudent Courses");
+            //studentCourse2.ForEach(sc => Console.WriteLine($"{sc.Name} and {sc.CourseName}"));
+
+
+
+            //// GroupBy + Count() – How many students per city
+
+            //var studentCountByCity = students.GroupBy(s => s.City)
+            //    .Select(g => new { City = g.Key, Count = g.Count() })
+            //    .ToList();
+
+            //Console.WriteLine("\nStudentsCount Per  City : ");
+
+            //studentCountByCity.ForEach(c => Console.WriteLine($" {c.City} : {c.Count} "));
+
+
+            //// finding avarages
+
+            //int maxMarks = students.Max(s => s.Marks);
+            //double avgMarks = students.Average(s => s.Marks);
+
+            //Console.WriteLine($"\nMax Marks: {maxMarks}");
+            //Console.WriteLine($"Average Marks: {avgMarks}");
+
+
+
+            //  Select Many
+
+            //var allSubjects = students.Where(s => s.Subjects != null)
+            //    .SelectMany(s => s.Subjects).ToList();
+
+
+
+            //var topScorers = students.OrderByDescending(x => x.Marks).ToList();
+
+            //Console.WriteLine("\nTop Scorers");
+            //topScorers.ForEach(s => Console.WriteLine($"{s.Name} - {s.Marks} - {s.City}"));
+
+
+
+            ////  Take, Skip – useful for pagination
+            //var top3=students.OrderByDescending(x=>x.Marks).Take(3).ToList();
+            //Console.WriteLine("\nTop 3 Students");
+            //top3.ForEach(s => Console.WriteLine($"{s.Name}- {s.Marks} - {s.City}"));
+
+            //var skip2 = students.Skip(2).Take(3).ToList();
+            //Console.WriteLine("\n Skipping 2 and Taking 3");
+            //skip2.ForEach(s => Console.WriteLine($"{s.Name} - {s.Marks} - {s.City}"));
+
+
+
+            //// Any All 
+            //bool anyLowMarks = students.Any(s => s.Marks < 50);
+            //Console.WriteLine($"\nAny Student with Marks < 50: {anyLowMarks}");
+
+            //bool allPassed = students.All(s => s.Marks >= 35);
+            //Console.WriteLine($"All Passed: {allPassed}");
+
+            ///// Distinct
+
+
+            //var uniquecities = students.Select(s => s.City).Distinct().ToList();
+            //Console.WriteLine("\nUnique Cities:");
+            //uniquecities.ForEach(c=>Console.WriteLine(c));
+
+
+            var topStudentPerCity = students
+                .GroupBy(s => s.City)
+                .Select(g => g.OrderByDescending(s => s.Marks).First()).ToList();
+
+            Console.WriteLine("\nTop Student from Each City:");
+            topStudentPerCity.ForEach(s =>
+                Console.WriteLine($"{s.Name} from {s.City} - {s.Marks}")
+            );
+
+
+
+
+            var averageStudentMarksPerCity = students
+                .GroupBy(s => s.City)
+                .Select(g => new
+                {
+                    City = g.Key,
+                    AveragrMarks = g.Average(s => s.Marks)
+                })
+                .ToList();
+
+            Console.WriteLine("\nAverage Marks Per City:");
+            averageStudentMarksPerCity.ForEach(x =>
+               Console.WriteLine($"{x.City} - Avg Marks {x.AveragrMarks}"));
+
+
+
+            var getAllStudentStartsWithS = students
+                .Where(s => s.Name.StartsWith("S")).ToList();
+
+            Console.WriteLine("\nStudents Starts With S");
+            getAllStudentStartsWithS.ForEach(s =>
+                Console.WriteLine($"{s.Name} from {s.City} - {s.Marks}")
+            );
+
+
+            var studentDict = students
+                .ToDictionary(s => s.Id);
+
+            Console.WriteLine("\nAccess student By ID  (eg , ID=3)");
+            if (studentDict.TryGetValue(3, out var student))
             {
-                Console.WriteLine($"Student Name : {course.StudentName} and Course Name : {course.CourseName}");
-
-
+                Console.WriteLine($"Student Found: {student.Name} from {student.City}");
             }
 
 
-            var studentCourse2 = students.Join(courses,
-                s => s.Id,
-                c => c.StudentId, (s, c) => new { s.Name, c.CourseName }).ToList();
-
-            Console.WriteLine("\nStudent Courses");
-            studentCourse2.ForEach(sc => Console.WriteLine($"{sc.Name} and {sc.CourseName}"));
-
-
-
-            // GroupBy + Count() – How many students per city
-
-            var studentCountByCity = students.GroupBy(s => s.City)
-                .Select(g => new { City = g.Key, Count = g.Count() })
-                .ToList();
-
-            Console.WriteLine("\nStudentsCount Per  City : ");
-
-            studentCountByCity.ForEach(c => Console.WriteLine($" {c.City} : {c.Count} "));
-
-
-            // finding avarages
-
-            int maxMarks = students.Max(s => s.Marks);
-            double avgMarks = students.Average(s => s.Marks);
-
-            Console.WriteLine($"\nMax Marks: {maxMarks}");
-            Console.WriteLine($"Average Marks: {avgMarks}");
-
-
-
-
-
-
-
-
         }
-
-
     }
+
 }
