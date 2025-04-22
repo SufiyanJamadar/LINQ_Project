@@ -222,6 +222,8 @@ namespace LINQ1
             //uniquecities.ForEach(c=>Console.WriteLine(c));
 
 
+
+            // Top N Students per City
             var topStudentPerCity = students
                 .GroupBy(s => s.City)
                 .Select(g => g.OrderByDescending(s => s.Marks).First()).ToList();
@@ -233,6 +235,7 @@ namespace LINQ1
 
 
 
+            // Group students by city and get average marks per city
 
             var averageStudentMarksPerCity = students
                 .GroupBy(s => s.City)
@@ -248,7 +251,7 @@ namespace LINQ1
                Console.WriteLine($"{x.City} - Avg Marks {x.AveragrMarks}"));
 
 
-
+            // Get all students whose names start with 'S'
             var getAllStudentStartsWithS = students
                 .Where(s => s.Name.StartsWith("S")).ToList();
 
@@ -258,6 +261,8 @@ namespace LINQ1
             );
 
 
+
+            // Convert list to Dictionary
             var studentDict = students
                 .ToDictionary(s => s.Id);
 
